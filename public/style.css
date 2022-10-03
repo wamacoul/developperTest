@@ -51,3 +51,27 @@
 {
     cursor: pointer;
 }
+.pagination 
+{   
+    width: 50%;
+    margin: auto;
+    padding-top: 2em;
+    display: flex;
+    align-items: center;
+}
+.pagination .normal
+{
+    color: brown;
+    padding: 6px 14px;
+    text-decoration: none;
+}
+.pagination .active
+{
+    color: aqua;
+    padding: 6px 14px;
+    text-decoration: none;
+}
+.pagination a:hover {
+    background-color: #031F3B;
+    color: white;
+}

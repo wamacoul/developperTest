@@ -20,6 +20,12 @@
             $manageTables = new ManageTable($pdo);
             //$manageTables->insertAuthor("wambi");
             //$manageTables->dropTables();
+            $totalitems = $manageTables->getNumberOfInput();
+            $limit = Connection::getLimit();
+            $totalPages = ceil($totalitems/$limit);
+            $page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+            $paginationStart = ($page-1)*$limit;
+
             if(empty($_POST['submit']))
             {
             }else
@@ -66,11 +72,11 @@
             }
             if(empty($_POST['input']))
             {
-                $books = $manageTables->getBooks();
+                $books = $manageTables->getBooks($paginationStart,$limit);
             }else
             {
                 $input = $_POST['input'];
-                $books = $manageTables->getBooks($input);
+                $books = $manageTables->getBooks($paginationStart,$limit,$input);
             }
         }catch(\PDOException $e)
         {
@@ -129,12 +135,6 @@
             ?>
             <?php
                 foreach($books as $row){
-                    /* if(!empty($_POST['input'])){
-                        echo "testing".$row['nameauthor'];
-                        $author = $manageTables->getAuthorByName($row['nameauthor']);
-                        echo "testing".$author['nameauthor'];
-                    }else{ */
-                    //}
             ?>
                 <div class="animation">
                     <div class="table">
@@ -162,6 +162,33 @@
                 }
             ?>
         </div>        
+    </div>
+    <div class="pagination">
+        <?php
+            if($page == 1){
+
+            }else{
+
+                echo "<a href='?page=".($page-1)."' class='normal'> << preview </a>";
+            }
+
+            for($i=1; $i<=$totalPages; $i++)
+            {
+                if($i == $page)
+                {
+                    echo "<a href='?page=".$i."' class='active'>".$i."</a>";
+                }else
+                {
+                    echo "<a href='?page=".$i."' class='normal'>".$i."</a>";
+                }
+            }
+            if($page == $totalPages || $totalPages==0){
+
+            }else{
+
+                echo "<a href='?page=".($page+1)."' class='normal'> next >> </a>";
+            }
+        ?>
     </div>
     <script src="javaScript.js"></script>
 </body>

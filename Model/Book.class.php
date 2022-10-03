@@ -44,9 +44,9 @@ include_once('../Database/ManageTable.class.php');
             $this->name = $name;
         }
 
-        public function getListBook()
+        public function getListBook($startPage,$limit)
         {
-            $books = $this->manageTable->getBooks();
+            $books = $this->manageTable->getBooks($startPage,$limit);
             $arrays = array();
             $i = 0;
             foreach($books as $row){

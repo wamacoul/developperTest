@@ -31,6 +31,25 @@ class Connection
 
         return $pdo;
     }
+    public static function getLimit()
+    {
+        //read parameters in the ini configuration file
+
+        $params = parse_ini_file('database.ini');
+
+        if($params === false)
+        {
+            throw new \Exception("Error reading database configuration file");
+        }
+
+        //connect to the postgresql database
+
+        $conStr = sprintf(
+            $params['limit'],
+        );
+        $limit = intval($conStr);
+        return $limit;
+    }
 
     /**
      * return an instance of the connection object

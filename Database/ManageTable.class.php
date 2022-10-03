@@ -129,7 +129,7 @@ class ManageTable
          }
 
     }
-    public function getBooks($authorName=null){
+    public function getBooks($startPage,$limit,$authorName=null){
         $this->createTables();
          // prepare statement for insert
          if(empty($authorName))
@@ -140,7 +140,8 @@ class ManageTable
                     FROM authors 
                     LEFT JOIN books 
                     ON books.author_id = authors.id
-                    LIMIT 30;
+                    LIMIT ".$limit."
+                    OFFSET ".$startPage.";
                     ";
 
             try{
@@ -161,8 +162,9 @@ class ManageTable
                         ON authors.id = books.author_id
                     WHERE
                         authors.nameauthor = '".$authorName."'
-                    LIMIT 30"
-                    ;
+                    LIMIT ".$limit."
+                    OFFSET ".$startPage.";
+                    ";
             try{
                 $books = $this->pdo->query($sql);              
                 return $books;
@@ -173,13 +175,32 @@ class ManageTable
          }
 
     }
+    public function getNumberOfInput(){
+        $this->createTables();
+         // prepare statement for insert
+            $sql = "SELECT 
+                        count(*) as count
+                    FROM authors 
+                    LEFT JOIN books 
+                    ON books.author_id = authors.id
+                    LIMIT 30;
+                    ";
+
+            try{
+                $books = $this->pdo->query($sql);
+                return $books->fetchColumn();
+            }catch(\Exception $e)
+            {
+                throw $e;
+            }
+    }
     public function alterChangeBookAuthorId($name,$author_id) {
         $this->createTables();
         // prepare statement for insert
         $sql = "UPDATE books SET author_id = :author_id WHERE namebook = :namebook;";
         $stmt = $this->pdo->prepare($sql);  
         $stmt->bindValue(':author_id',$author_id);  
-        $stmt->bindValue(':namebook',$name);   
+        $stmt->bindValue(':namebook',$name);  
         try{
             // execute the insert statement
             $stmt->execute();
