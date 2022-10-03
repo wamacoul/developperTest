@@ -157,13 +157,13 @@ class ManageTable
                         nameauthor, 
                         namebook 
                     FROM 
-                        books 
-                    RIGHT JOIN authors 
-                        ON authors.id = books.author_id
+                        authors 
+                    RIGHT JOIN books 
+                        ON  books.author_id = authors.id
                     WHERE
                         authors.nameauthor = '".$authorName."'
-                    LIMIT ".$limit."
-                    OFFSET ".$startPage.";
+                    LIMIT null
+                    OFFSET null;
                     ";
             try{
                 $books = $this->pdo->query($sql);              
